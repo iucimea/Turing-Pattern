@@ -46,19 +46,19 @@ def simulation(u,v):
             
 def observe(u,v):
     
-    plt.subplot(1,2,1)
     plt.cla()
     plt.imshow(u)
     plt.title('u')
 
-    plt.subplot(1,2,2)
+    # plt.subplot(1,2,2) 
     plt.cla()
     plt.imshow(v)
     plt.title('v')
     
     
 #%% 
-for i in range(100):
+for i in range(1000):
     u,v = simulation(u, v)
 
+#%%
 observe(u,v)
