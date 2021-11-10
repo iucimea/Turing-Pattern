@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #%% 
-n = 400 # grid size
+n = 100 # grid size
 delta_x = 1. / n # spatial resolution, assuming space is [0,1] * [0,1]
 delta_t = 0.02 # temporal resolution
 simulation_steps = 200
@@ -48,27 +48,21 @@ def simulation(u,v):
     return next_u,next_v
 
             
-def observe(u,v):
+def observe(u):
     
     plt.imshow(u, cmap='binary')
-    plt.title('u')
+    plt.title(i)
     plt.show()
     
     
 #%% 
 
+image_list = []
+
 for i in range(simulation_steps):
     u,v = simulation(u,v)
-    
-    if i == 1:
-        observe(u,v)
-    if i == 30:
-        observe(u,v)
-    if i == 60:
-        observe(u,v)
-    if i == 100:
-        observe(u,v)
-    if i == 150:
-        observe(u,v)
+    if i % 10 == 0:
+        observe(u)
+        image_list.append(observe(u))
     
 
