@@ -4,7 +4,6 @@ from configparser import ConfigParser
 import os
 
 
-
 def file_read(filename):
     
     """Checks the existence of the configuration file and reads the simulation parameters from it
@@ -13,7 +12,7 @@ def file_read(filename):
         filename : name of the configuration file
     
     Returns:
-        Values for n, delta_t, simulation_steps, a,b,c,d,h,k, diff_u, diff_v
+        Values for n, delta_t, simulation_steps, plot_steps, a,b,c,d,h,k, diff_u, diff_v
         
     Raise:
         ValueError if the configuration file name is not found."""
@@ -24,6 +23,7 @@ def file_read(filename):
         n = parser.getint('settings','n') # grid size
         delta_t = parser.getfloat('settings','delta_t') # temporal resolution
         simulation_steps = parser.getint('settings','simulation_steps') # number of delta_t steps performed
+        plot_steps = parser.getint('settings','plot_steps') # Time spacing between 2 consecutive plots
         
         # parameter values for reaction term:
         a = parser.getfloat('reaction','a')
@@ -40,17 +40,17 @@ def file_read(filename):
     else:
         raise ValueError('Filename ' +filename+ ' not found')
     
-    return n,delta_t,simulation_steps,a,b,c,d,h,k,diff_u,diff_v
+    return n,delta_t,simulation_steps,plot_steps,a,b,c,d,h,k,diff_u,diff_v
 
 
 # Read parameters from filename
-n,delta_t,simulation_steps,a,b,c,d,h,k,diff_u,diff_v = file_read('configuration.txt')
+n,delta_t,simulation_steps,plot_steps,a,b,c,d,h,k,diff_u,diff_v = file_read('configuration.txt')
 
 
 delta_x = 1. / n # spatial resolution, assuming space is [1,0] * [0,1]
 
 
-# Generates the random seeds
+# Generates the initial random concentration distributions
 u = 1 + np.random.rand(n,n) * 0.06 - 0.03 
 v = 1 + np.random.rand(n,n) * 0.06 - 0.03 
 
@@ -62,6 +62,16 @@ next_v = np.zeros((n,n))
 
 
 def simulation(u,v):
+    
+    """Performs the reaction diffusion simulation starting from 2 random matrices of concentrations u and v
+       
+    Parameters
+        u : concentration matrix for reagent u
+        v : concentration matrix for reagent v
+    
+    Returns:
+        Matrices next_u, next_v with the concentrations updated by the reaction diffusion equation"""
+        
     for x in range(n):
         for y in range(n):
             
@@ -88,6 +98,14 @@ def simulation(u,v):
             
 def observe(u):
     
+    """Plots the concentration matrix in a 2D binary colormap visualization
+       
+    Parameters
+        u : concentration matrix for reagent u
+    
+    Returns:
+        2D plot for the concentration matrix u"""
+    
     plt.title('Time=%d'%i)
     plt.imshow(u, cmap='binary')
     plt.show()
@@ -97,6 +115,6 @@ def observe(u):
 
 for i in range(simulation_steps):
     u,v = simulation(u,v)
-    if i % 20 == 0:
+    if i % plot_steps == 0:
         observe(u)
     
