@@ -16,8 +16,8 @@ complex spatio-temporal dynamics.
 Alan Turing’s partial differential equation models were among the ﬁrst reaction-diffusion systems developed in the early 1950s. 
 A simple linear version of Turing’s equations is the following:
 
-∂u∂t=a(u−h)+b(v−k)+DuΔ2u
-∂u∂t=c(u−h)+d(v−k)+DuΔ2u
+![alt text](https://github.com/iucimea/Turing-Pattern/blob/main/Images/CodeCogsEqn%20(1).gif)
+![alt text](https://github.com/iucimea/Turing-Pattern/blob/main/Images/CodeCogsEqn%20(2).gif)
 
 The state variables  u  and  v  represent concentrations of two chemical species.
 a,b,c,  and  d  are parameters that determine the behavior of the reaction terms, while  h  and  k  are constants. 
