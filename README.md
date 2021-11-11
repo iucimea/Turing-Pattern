@@ -2,6 +2,7 @@
 
 Reaction-diffusion systems are continuous ﬁeld models whose equations are made of only reaction terms and diffusion terms, as shown below:
 
+![alt text](https://github.com/iucimea/Turing-Pattern/blob/main/Images/CodeCogsEqn.gif)
 
 
 Reaction terms ( Ri(...) ) describe only local dynamics, without any spatial derivatives involved. 
