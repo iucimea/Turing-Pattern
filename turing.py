@@ -1,23 +1,26 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-#%% 
+
+# Simulation parameters
 n = 100 # grid size
-delta_x = 1. / n # spatial resolution, assuming space is [0,1] * [0,1]
+delta_x = 1. / n # spatial resolution, assuming space is [1,0] * [0,1]
 delta_t = 0.02 # temporal resolution
-simulation_steps = 200
+simulation_steps = 200 # number of delta_t steps performed 
 
-a, b, c, d, h, k = 1., -1., 2., -1.5, 1., 1. # parameter values for reaction term: 
-                                             # 
-diff_u = 0.0001 # diffusion constant of u
-diff_v = 0.0006 # diffusion constant of v
+# parameter values for reaction term:
+a, b, c, d, h, k = 1., -1., 2., -1.5, 1., 1.  
+ 
+# diffusion coefficients of u and v                                             
+diff_u = 0.0001 
+diff_v = 0.0006
 
-u = 1 + np.random.rand(n,n) * 0.06 - 0.03 #
-v = 1 + np.random.rand(n,n) * 0.06 - 0.03 #
+# Generates the random seeds
+u = 1 + np.random.rand(n,n) * 0.06 - 0.03 
+v = 1 + np.random.rand(n,n) * 0.06 - 0.03 
 
-start_u = u
-start_v = v
 
+# Initializes the empty matrices for the loop
 next_u = np.zeros((n,n))
 next_v = np.zeros((n,n))
 
@@ -50,46 +53,15 @@ def simulation(u,v):
             
 def observe(u):
     
-    plt.title(i)
-    plt.imsave(str(i), u, cmap='binary')
-    
+    plt.title('Time=%d'%i)
     plt.imshow(u, cmap='binary')
-
+    plt.show()
     
     
 #%% 
 
-# image_list = []
-
 for i in range(simulation_steps):
     u,v = simulation(u,v)
-    if i % 10 == 0:
+    if i % 20 == 0:
         observe(u)
-        # image_list.append(observe(u))
     
-#%%
-
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-
-hmpf = np.ones([4,4])
-hmpf[2][1] = 0
-imagelist = [ hmpf*i*255./19. for i in range(20) ]
-
-fig = plt.figure() # make figure
-
-# make axesimage object
-# the vmin and vmax here are very important to get the color map correct
-im = plt.imshow(imagelist[0], cmap=plt.get_cmap('jet'), vmin=0, vmax=255)
-
-# function to update figure
-def updatefig(j):
-    # set the data in the axesimage object
-    im.set_array(imagelist[j])
-    # return the artists set
-    return [im]
-# kick off the animation
-ani = animation.FuncAnimation(fig, updatefig, frames=range(20), 
-                              interval=50, blit=True)
-plt.show()
