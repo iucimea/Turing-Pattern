@@ -1,12 +1,22 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from configparser import ConfigParser
 
+
+parser = ConfigParser()
+parser.read('configuration.txt')
 
 # Simulation parameters
-n = 100 # grid size
+n = parser.get('settings','n') # grid size
 delta_x = 1. / n # spatial resolution, assuming space is [1,0] * [0,1]
-delta_t = 0.02 # temporal resolution
-simulation_steps = 200 # number of delta_t steps performed 
+delta_t = parser.get('settings','delta_t') # temporal resolution
+simulation_steps = parser.get('settings','simulation_steps') # number of delta_t steps performed 
+
+n = int(n)
+delta_t = float(delta_t)
+simulation_steps = int(simulation_steps)
+
+
 
 # parameter values for reaction term:
 a, b, c, d, h, k = 1., -1., 2., -1.5, 1., 1.  

@@ -1,0 +1,4 @@
+[settings]
+n = 100
+delta_t = 0.02 
+simulation_steps = 200 
