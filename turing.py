@@ -4,7 +4,7 @@ from configparser import ConfigParser
 import os
 
 
-def file_read(filename):
+def config_read(filename):
     
     """Checks the existence of the configuration file and reads the simulation parameters from it
        
@@ -20,6 +20,8 @@ def file_read(filename):
     if os.path.isfile(filename):
         parser = ConfigParser()
         parser.read(filename)
+        
+        #Settings for the matrices and simulation
         n = parser.getint('settings','n') # grid size
         delta_t = parser.getfloat('settings','delta_t') # temporal resolution
         simulation_steps = parser.getint('settings','simulation_steps') # number of delta_t steps performed
@@ -44,20 +46,41 @@ def file_read(filename):
 
 
 # Read parameters from filename
-n,delta_t,simulation_steps,plot_steps,a,b,c,d,h,k,diff_u,diff_v = file_read('configuration.txt')
+n,delta_t,simulation_steps,plot_steps,a,b,c,d,h,k,diff_u,diff_v = config_read('configuration.txt')
 
 
 delta_x = 1. / n # spatial resolution, assuming space is [1,0] * [0,1]
 
 
+
+
+def starting_state(n):
+    """This method generates 2 random concentration matrices for the reagents u and v.
+       
+    Parameters
+        n : length and width of the square lattice.
+    
+    Returns:
+        The state of the initial configuration of the (N*M) spins. 
+        
+    Raise:
+        ValueError if length or width of the lattice is less than 1."""
+    if n < 1:
+        raise ValueError('The dimension of the lattice must be > 1, but is {}'.format(n))
+    np.random.seed(1)
+    init_state = 1 + np.random.rand(n,n) * 0.06 - 0.03
+    next_state = np.zeros((n,n))
+    return init_state, next_state
+
+
 # Generates the initial random concentration distributions
-u = 1 + np.random.rand(n,n) * 0.06 - 0.03 
-v = 1 + np.random.rand(n,n) * 0.06 - 0.03 
+u = starting_state(n)[0]
+v = starting_state(n)[0]
 
 
 # Initializes the empty matrices for the loop
-next_u = np.zeros((n,n))
-next_v = np.zeros((n,n))
+next_u = starting_state(n)[1]
+next_v = starting_state(n)[1]
 
 
 
@@ -111,7 +134,7 @@ def observe(u):
     plt.show()
     
     
-#%% 
+#%% Loop performing the simulation and plotting the result every "plot_steps" number of steps
 
 for i in range(simulation_steps):
     u,v = simulation(u,v)
