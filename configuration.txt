@@ -1,8 +1,8 @@
 [settings]
 n = 100
 delta_t = 0.02 
-simulation_steps = 100 
-plot_steps = 10
+simulation_steps = 300 
+plot_steps = 20
 
 [reaction]
 a = 1
