@@ -1,7 +1,7 @@
 [settings]
-n = 100
-delta_t = 0.02 
-simulation_steps = 300 
+grid_side = 100
+delta_t = 0.04
+simulation_steps = 500
 plot_steps = 20
 
 [reaction]
